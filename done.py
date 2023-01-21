@@ -2,9 +2,11 @@
 import os
 from datetime import datetime
 
+from consts import DIR_LOCATION
+
 
 def main():
-    os.system('git add .')
+    os.system(f'git add {DIR_LOCATION}/.')
     os.system(f'git commit -m {datetime.now().strftime("%Y/%m/%d")}')
     os.system('git push')
 
