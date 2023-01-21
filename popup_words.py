@@ -7,7 +7,7 @@ import webbrowser
 import requests
 from dotenv import load_dotenv
 
-DEFAULT_SAMPLE_SIZE = 3
+DEFAULT_SAMPLE_SIZE = 5
 
 
 def main():
