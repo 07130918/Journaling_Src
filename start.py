@@ -7,6 +7,8 @@ from popup_words import main as popup_words
 
 
 def main():
+    """ジャーナリングを始める前に、タイマーアプリ、ファイル、使う単語を準備する関数
+    """
     year = datetime.now().year
     month = datetime.now().strftime('%B')
     day = datetime.now().strftime('%d')

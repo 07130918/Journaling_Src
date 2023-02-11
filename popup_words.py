@@ -11,8 +11,10 @@ DEFAULT_SAMPLE_SIZE = 5
 
 
 def main():
-    words = get_random_words(int(sys.argv[1])) if len(
-        sys.argv) > 1 else get_random_words(DEFAULT_SAMPLE_SIZE)
+    """ランダムな単語をスプレッドシートから取得して、ポップアップで表示する関数
+    """
+    amount = int(sys.argv[1]) if len(sys.argv) > 1 else DEFAULT_SAMPLE_SIZE
+    words = get_random_words(amount)
     generate_popup(words)
 
 

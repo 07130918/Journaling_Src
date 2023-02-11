@@ -9,6 +9,8 @@ from review import print_decorated
 
 
 def main():
+    """ランダムな日付のジャーナリングを出力する関数
+    """
     amount_of_days_2022 = 365
     amount_of_days_2023 = (date.today() - generate_new_years_day()).days + 1
     count = sys.argv[1] if len(sys.argv) > 1 and int(sys.argv[1]) != 0 else 3

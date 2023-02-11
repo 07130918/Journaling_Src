@@ -38,6 +38,8 @@ class FormatError(Exception):
 
 
 def main():
+    """ジャーナリングのレビューを行う関数
+    """
     formatted_cli_args = check_args()
     if not formatted_cli_args:
         return
