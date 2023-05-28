@@ -61,9 +61,9 @@ def main():
     Your answer:
     """
 
-    # クリエイティブな文章を生成するため、temperatureを1に設定
+    # temperatureは値を変更していろいろ試したけど、0.8が良さそう。
     # modelはgpt-4に変更予定
-    gpt = ChatOpenAI(model="gpt-3.5-turbo", temperature=1, client=None)
+    gpt = ChatOpenAI(model="gpt-3.5-turbo", temperature=.8, client=None)
 
     assistant_prompt = SystemMessagePromptTemplate.from_template(assistant_template)
     user_prompt = HumanMessagePromptTemplate.from_template(user_template)
