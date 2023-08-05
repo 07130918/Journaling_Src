@@ -1,4 +1,3 @@
-import os
 from datetime import datetime
 
 from dotenv import load_dotenv
@@ -28,7 +27,7 @@ def main():
     """
     load_dotenv()
     print("Loading...")
-    os.environ["OPENAI_API_KEY"] = os.environ['OPENAI_API_KEY']
+
     try:
         with open(f"{JOURNALING_DIR}/{TODAY}.txt", "r") as f:
             journal = f.read()
@@ -63,7 +62,7 @@ def main():
 
     # temperatureは値を変更していろいろ試したけど、0.8が良さそう。
     # modelはgpt-4に変更予定
-    gpt = ChatOpenAI(model="gpt-3.5-turbo", temperature=.8, client=None)
+    gpt = ChatOpenAI(model="gpt-4-0613", temperature=.8, client=None)
 
     assistant_prompt = SystemMessagePromptTemplate.from_template(assistant_template)
     user_prompt = HumanMessagePromptTemplate.from_template(user_template)
