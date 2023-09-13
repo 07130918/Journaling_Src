@@ -25,18 +25,18 @@ def main():
         str: response from GPT-3
         None: if journaling file is not found
     """
+    print("Loading env...")
     load_dotenv()
-    print("Loading...")
+    print("Proofreading...")
 
     try:
         with open(f"{JOURNALING_DIR}/{TODAY}.txt", "r") as f:
             journal = f.read()
     except FileNotFoundError as e:
         print(e)
-        print("今日の日記はまだ書いていません。")
         return None
 
-    assistant_template = "You are a helpful and capable assistant who can behave as a native {language} speaker."
+    system_template = "You are a helpful and capable assistant who can behave as a native {language} speaker."
     user_template = """
     I'm looking for someone who can play the role of a native {language} speaker and teacher.
     I'm Japanese and currently learning {language} as my second language.
@@ -61,18 +61,18 @@ def main():
     """
 
     # temperatureは値を変更していろいろ試したけど、0.8が良さそう。
-    # modelはgpt-4に変更予定
-    gpt = ChatOpenAI(model="gpt-3.5-turbo", temperature=.8, client=None)
-
-    assistant_prompt = SystemMessagePromptTemplate.from_template(assistant_template)
+    gpt = ChatOpenAI(model="gpt-4", temperature=0.8, client=None)
+    system_prompt = SystemMessagePromptTemplate.from_template(system_template)
     user_prompt = HumanMessagePromptTemplate.from_template(user_template)
-    chat_prompt = ChatPromptTemplate.from_messages([assistant_prompt, user_prompt])
+    chat_prompt = ChatPromptTemplate.from_messages([system_prompt, user_prompt])
 
     chain = LLMChain(llm=gpt, prompt=chat_prompt)
     response = chain.run(language=LANGUAGE, journal=journal)
+
     print("-" * 20)
     print(response)
     print("-" * 20)
+
     return response
 
 
