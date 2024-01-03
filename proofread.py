@@ -15,6 +15,7 @@ TODAY = (f"{CURRENT_YEAR}/{CURRENT_MONTH_NAME}/{str(NOW.strftime('%d')).zfill(2)
 # 学習したい言語
 LANGUAGE = "English"
 
+
 def main():
     """proofread journaling
 
