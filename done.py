@@ -8,12 +8,12 @@ from proofread import main as proofread
 def main():
     """Journalingを書き終わった後にpushまで行う関数
     """
-    proofread()
-    print("Did u already rewrite the file? [y/n]")
-    answer = input()
-    if answer != "y":
-        print("Please rewrite the file.")
-        return
+    # proofread()
+    # print("Did u already rewrite the file? [y/n]")
+    # answer = input()
+    # if answer != "y":
+    #     print("Please rewrite the file.")
+    #     return
 
     os.chdir(DIR_LOCATION)
     os.system(f'git add {DIR_LOCATION}/.')
