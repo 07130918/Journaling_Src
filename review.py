@@ -7,26 +7,8 @@ from consts import DIR_LOCATION
 
 """TODAY format is like 2022/June/11"""
 NOW = datetime.now()
-CURRENT_YEAR = NOW.strftime("%Y")
-CURRENT_MONTH_NAME = NOW.strftime("%B")
-TODAY = (
-    f"{CURRENT_YEAR}/" f"{CURRENT_MONTH_NAME}/" f"{str(NOW.strftime('%d')).zfill(2)}"
-)
+TODAY = NOW.strftime("%Y/%B/%d").zfill(2)
 SPAN_DEFAULT = 7
-END_OF_MONTH = {
-    "January": 31,
-    "February": 28,
-    "March": 31,
-    "April": 30,
-    "May": 31,
-    "June": 30,
-    "July": 31,
-    "August": 31,
-    "September": 30,
-    "October": 31,
-    "November": 30,
-    "December": 31,
-}
 
 
 class FormatError(Exception):
@@ -38,10 +20,8 @@ class FormatError(Exception):
 def main():
     """ジャーナリングのレビューを行う関数"""
     formatted_cli_args = check_args()
-    if not formatted_cli_args:
-        return
-
-    print_journaling_according_to(*formatted_cli_args)
+    if formatted_cli_args:
+        print_journaling_according_to(*formatted_cli_args)
 
 
 def check_args():
@@ -53,7 +33,7 @@ def check_args():
                 int: start_month (1-12) 出力を開始する月
                 int: start_day (1-31) 出力を開始する日
                 int: span 出力する日数
-        異常系: false
+        異常系: False
     """
     # コマンドライン第2引数がない場合は7日前の日付を返却する
     if len(sys.argv) == 1:
@@ -92,10 +72,11 @@ def check_args():
 def calculate_7days_ago_from_today():
     """今日から7日前の日付を返却する関数"""
     seven_days_ago = NOW - timedelta(days=7)
-    year = int(seven_days_ago.strftime("%Y"))
-    month = int(seven_days_ago.strftime("%m"))
-    day = int(seven_days_ago.strftime("%d"))
-    return year, month, day
+    return (
+        int(seven_days_ago.strftime("%Y")),
+        int(seven_days_ago.strftime("%m")),
+        int(seven_days_ago.strftime("%d")),
+    )
 
 
 def print_journaling_according_to(year, month, day, span):
@@ -106,23 +87,28 @@ def print_journaling_according_to(year, month, day, span):
         day: int: 出力を始める日
         span: int: 出力する日数
     """
-    for _ in range(span):
+    count = 0
+    while count < span:
         month_name = calendar.month_name[month]
         file_name = f"{DIR_LOCATION}/{year}/{month_name}/{str(day).zfill(2)}"
         try:
             with open(f"{file_name}.txt", "r") as f:
                 print_decorated(f"{month_name} {day} {year}")
                 print(f.read())
+                count += 1
         except FileNotFoundError:
-            _, last_day = calendar.monthrange(year, month)
-            if day >= last_day:
-                month += 1
-                if month > 12:
-                    year += 1
-                    month = 1
-                day = 1
-            else:
-                day += 1
+            pass
+
+        _, last_day = calendar.monthrange(year, month)
+        if day >= last_day:
+            month += 1
+            if month > 12:
+                year += 1
+                month = 1
+            day = 1
+        else:
+            day += 1
+
         if file_name == f"{DIR_LOCATION}/{TODAY}":
             print_terminate()
             break
