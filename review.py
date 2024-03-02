@@ -9,37 +9,35 @@ from consts import DIR_LOCATION
 NOW = datetime.now()
 CURRENT_YEAR = NOW.strftime("%Y")
 CURRENT_MONTH_NAME = NOW.strftime("%B")
-TODAY = (f"{CURRENT_YEAR}/"
-         f"{CURRENT_MONTH_NAME}/"
-         f"{str(NOW.strftime('%d')).zfill(2)}"
-         )
+TODAY = (
+    f"{CURRENT_YEAR}/" f"{CURRENT_MONTH_NAME}/" f"{str(NOW.strftime('%d')).zfill(2)}"
+)
 SPAN_DEFAULT = 7
 
 END_OF_MONTH = {
-    'January': 31,
-    'February': 28,
-    'March': 31,
-    'April': 30,
-    'May': 31,
-    'June': 30,
-    'July': 31,
-    'August': 31,
-    'September': 30,
-    'October': 31,
-    'November': 30,
-    'December': 31
+    "January": 31,
+    "February": 28,
+    "March": 31,
+    "April": 30,
+    "May": 31,
+    "June": 30,
+    "July": 31,
+    "August": 31,
+    "September": 30,
+    "October": 31,
+    "November": 30,
+    "December": 31,
 }
 
 
 class FormatError(Exception):
-    """コマンドライン第1引数のフォーマットエラーを通知するクラス
-    """
+    """コマンドライン第1引数のフォーマットエラーを通知するクラス"""
+
     pass
 
 
 def main():
-    """ジャーナリングのレビューを行う関数
-    """
+    """ジャーナリングのレビューを行う関数"""
     formatted_cli_args = check_args()
     if not formatted_cli_args:
         return
@@ -52,26 +50,26 @@ def check_args():
     Returns:
         正常系:
             tuple:
-                int: start_year (2022 or 2023) 出力を開始する年
+                int: start_year (2022, 2023 or 2024) 出力を開始する年
                 int: start_month (1-12) 出力を開始する月
                 int: start_day (1-31) 出力を開始する日
                 int: span 出力する日数
         異常系: False
     """
-    # コマンドライン第1引数がない場合は7日前の日付を返却する
+    # コマンドライン第2引数がない場合は7日前の日付を返却する
     if len(sys.argv) == 1:
         return *calculate_7days_ago_from_today(), SPAN_DEFAULT
 
     # コマンドラインのフォーマットをチェックする
     try:
         first_arg = re.fullmatch(
-            r'^(2022|2023)/([1-9]|1+[0-2])/[0-9]{1,2}$',
-            sys.argv[1])
+            r"^(2022|2023|2024)/([1-9]|1+[0-2])/[0-9]{1,2}$", sys.argv[1]
+        )
         if sys.argv[1] and first_arg is None:
-            # 第1引数のフォーマットが不正の場合
+            # 第2引数のフォーマットが不正の場合
             raise FormatError
 
-        start_date = first_arg.group().split('/')  # type: ignore
+        start_date = first_arg.group().split("/")  # type: ignore
         start_year = int(start_date[0])
         start_month = int(start_date[1])
         start_day = int(start_date[2])
@@ -79,7 +77,7 @@ def check_args():
             raise FormatError
 
         if len(sys.argv) == 2:
-            # コマンドライン第2引数がない場合は期間を7日間とする
+            # コマンドライン第3引数がない場合は期間を7日間とする
             return start_year, start_month, start_day, SPAN_DEFAULT
 
         return start_year, start_month, start_day, int(sys.argv[2])
@@ -91,8 +89,7 @@ def check_args():
 
 
 def calculate_7days_ago_from_today():
-    """今日から7日前の日付を返却する関数
-    """
+    """今日から7日前の日付を返却する関数"""
     seven_days_ago = NOW - timedelta(days=7)
     year = int(seven_days_ago.strftime("%Y"))
     month = int(seven_days_ago.strftime("%m"))
@@ -113,15 +110,13 @@ def print_journaling_according_to(year, month, day, span):
     while True:
         if count == span:
             # 指定した期間を出力したら終了する
-            # print_decorated(f'Iterations has been reached {span} days.')
             print_terminate(f"{span} days")
             break
 
-        file_name = f'{DIR_LOCATION}/{year}/{month_name}/{str(day).zfill(2)}'
-
+        file_name = f"{DIR_LOCATION}/{year}/{month_name}/{str(day).zfill(2)}"
         try:
-            with open(f'{file_name}.txt', 'r') as f:
-                print_decorated(f'{month_name} {day} {year}')
+            with open(f"{file_name}.txt", "r") as f:
+                print_decorated(f"{month_name} {day} {year}")
                 print(f.read())
                 day += 1
                 count += 1
@@ -151,14 +146,14 @@ def print_journaling_according_to(year, month, day, span):
                 day += 1
 
             else:
-                print('Error: ', e)
+                print("Error: ", e)
                 return
 
 
 def print_decorated(message):
-    horizon_line = ' ' + '-' * (len(message) + 2)
+    horizon_line = " " + "-" * (len(message) + 2)
     print(horizon_line)
-    print('| ' + message + ' |')
+    print("| " + message + " |")
     print(horizon_line)
 
 
@@ -166,5 +161,5 @@ def print_terminate(message="Today"):
     print_decorated(f"Iterations has been reached {message}.")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
