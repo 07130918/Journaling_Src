@@ -1,1 +1,1 @@
-DIR_LOCATION = '/Users/satokota/Desktop/English/Journaling'
+DIR_LOCATION = "/Users/satokota/Desktop/English/Journaling"

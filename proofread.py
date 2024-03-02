@@ -3,15 +3,17 @@ from datetime import datetime
 from dotenv import load_dotenv
 from langchain import LLMChain
 from langchain.chat_models import ChatOpenAI
-from langchain.prompts.chat import (ChatPromptTemplate,
-                                    HumanMessagePromptTemplate,
-                                    SystemMessagePromptTemplate)
+from langchain.prompts.chat import (
+    ChatPromptTemplate,
+    HumanMessagePromptTemplate,
+    SystemMessagePromptTemplate,
+)
 
 JOURNALING_DIR = "/Users/satokota/Desktop/English/Journaling"
 NOW = datetime.now()
 CURRENT_YEAR = NOW.strftime("%Y")
 CURRENT_MONTH_NAME = NOW.strftime("%B")
-TODAY = (f"{CURRENT_YEAR}/{CURRENT_MONTH_NAME}/{str(NOW.strftime('%d')).zfill(2)}")
+TODAY = f"{CURRENT_YEAR}/{CURRENT_MONTH_NAME}/{str(NOW.strftime('%d')).zfill(2)}"
 # 学習したい言語
 LANGUAGE = "English"
 
@@ -77,5 +79,5 @@ def main():
     return response
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

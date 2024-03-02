@@ -7,26 +7,25 @@ from popup_words import main as popup_words
 
 
 def main():
-    """ジャーナリングを始める前に、タイマーアプリ、ファイル、使う単語を準備する関数
-    """
+    """ジャーナリングを始める前に、タイマーアプリ、ファイル、使う単語を準備する関数"""
     year = datetime.now().year
-    month = datetime.now().strftime('%B')
-    day = datetime.now().strftime('%d')
+    month = datetime.now().strftime("%B")
+    day = datetime.now().strftime("%d")
 
-    if not os.path.isdir(f'{DIR_LOCATION}/{year}'):
-        os.system(f'mkdir {DIR_LOCATION}/{year}')
-    if not os.path.isdir(f'{DIR_LOCATION}/{year}/{month}'):
-        os.system(f'mkdir {DIR_LOCATION}/{year}/{month}')
+    if not os.path.isdir(f"{DIR_LOCATION}/{year}"):
+        os.system(f"mkdir {DIR_LOCATION}/{year}")
+    if not os.path.isdir(f"{DIR_LOCATION}/{year}/{month}"):
+        os.system(f"mkdir {DIR_LOCATION}/{year}/{month}")
 
     # タイマーアプリの準備
-    subprocess.call(['/usr/bin/open', '/Applications/AS Timer.app'])
+    subprocess.call(["/usr/bin/open", "/Applications/AS Timer.app"])
     # ファイルの準備
-    todays_file = f'{DIR_LOCATION}/{year}/{month}/{day}.txt'
-    os.system(f'touch {todays_file}')
-    os.system(f'open {todays_file}')
+    todays_file = f"{DIR_LOCATION}/{year}/{month}/{day}.txt"
+    os.system(f"touch {todays_file}")
+    os.system(f"open {todays_file}")
     # 今日のジャーナリングで使う単語のポップアップを準備
     popup_words()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
