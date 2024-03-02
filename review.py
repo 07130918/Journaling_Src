@@ -13,7 +13,6 @@ TODAY = (
     f"{CURRENT_YEAR}/" f"{CURRENT_MONTH_NAME}/" f"{str(NOW.strftime('%d')).zfill(2)}"
 )
 SPAN_DEFAULT = 7
-
 END_OF_MONTH = {
     "January": 31,
     "February": 28,
@@ -54,7 +53,7 @@ def check_args():
                 int: start_month (1-12) 出力を開始する月
                 int: start_day (1-31) 出力を開始する日
                 int: span 出力する日数
-        異常系: False
+        異常系: false
     """
     # コマンドライン第2引数がない場合は7日前の日付を返却する
     if len(sys.argv) == 1:
@@ -63,28 +62,30 @@ def check_args():
     # コマンドラインのフォーマットをチェックする
     try:
         first_arg = re.fullmatch(
-            r"^(2022|2023|2024)/([1-9]|1+[0-2])/[0-9]{1,2}$", sys.argv[1]
+            r"^(20)?(22|23|24)/(0?[1-9]|1[0-2])/0?[1-9]|[12][0-9]|3[01]$", sys.argv[1]
         )
         if sys.argv[1] and first_arg is None:
             # 第2引数のフォーマットが不正の場合
             raise FormatError
 
         start_date = first_arg.group().split("/")  # type: ignore
-        start_year = int(start_date[0])
+        year_mapping = {"22": "2022", "23": "2023", "24": "2024"}
+        start_year = int(year_mapping.get(start_date[0], start_date[0]))
         start_month = int(start_date[1])
         start_day = int(start_date[2])
         if start_day > 31:
             raise FormatError
 
-        if len(sys.argv) == 2:
-            # コマンドライン第3引数がない場合は期間を7日間とする
-            return start_year, start_month, start_day, SPAN_DEFAULT
-
-        return start_year, start_month, start_day, int(sys.argv[2])
-    except (FormatError, ValueError) as e:
+        # コマンドライン第3引数がない場合は期間を7日間とする
+        span = int(sys.argv[2]) if len(sys.argv) > 2 else SPAN_DEFAULT
+        return start_year, start_month, start_day, span
+    except FormatError:
+        print(f"Error: arguments format are invalid -> {sys.argv[1:]}")
+        print("Command line args need to be matched with the following format:")
+        print("'^(20)?(22|23|24)/(0?[1-9]|1[0-2])/0?[1-9]|[12][0-9]|3[01]$'")
+        return False
+    except ValueError as e:
         print(e)
-        print(f"Error: arguments are invalid -> {sys.argv[1:]}")
-        print("command line args need to be like 2023/1/6 7")
         return False
 
 
