@@ -106,49 +106,28 @@ def print_journaling_according_to(year, month, day, span):
         day: int: 出力を始める日
         span: int: 出力する日数
     """
-    month_name = str(calendar.month_name[month])
-    count = 0
-    while True:
-        if count == span:
-            # 指定した期間を出力したら終了する
-            print_terminate(f"{span} days")
-            break
-
+    for _ in range(span):
+        month_name = calendar.month_name[month]
         file_name = f"{DIR_LOCATION}/{year}/{month_name}/{str(day).zfill(2)}"
         try:
             with open(f"{file_name}.txt", "r") as f:
                 print_decorated(f"{month_name} {day} {year}")
                 print(f.read())
-                day += 1
-                count += 1
-
-            if file_name == f"{DIR_LOCATION}/{TODAY}":
-                # ループが当日に達したら終了する
-                print_terminate()
-                break
-        except FileNotFoundError as e:
-            if file_name == f"{DIR_LOCATION}/{TODAY}":
-                # 当日分が無かったら終了
-                print_terminate()
-                return
-
-            elif day >= END_OF_MONTH[month_name]:
-                # 月の最終日を超える、もしくは月の最終日のファイルがない場合に次の月にする
+        except FileNotFoundError:
+            _, last_day = calendar.monthrange(year, month)
+            if day >= last_day:
                 month += 1
-                if month == 13:
-                    # 12月を超える場合には次の年にする
+                if month > 12:
                     year += 1
                     month = 1
                 day = 1
-                month_name = calendar.month_name[month]
-
-            elif day < END_OF_MONTH[month_name]:
-                # 該当の日付ファイルがない場合スキップして次の日に進む
-                day += 1
-
             else:
-                print("Error: ", e)
-                return
+                day += 1
+        if file_name == f"{DIR_LOCATION}/{TODAY}":
+            print_terminate()
+            break
+    else:
+        print_terminate(f"{span} days")
 
 
 def print_decorated(message):
